@@ -11,34 +11,34 @@ interface UserData {
 const app = dialogflow<{}, UserData>({
   debug: true,
 });
+
+const serviceAccount = require('../../robot-motivator-firebase-admin.json');
 const config = functions.config().robotmotivator;
-const databaseConfig = {
-  apiKey: config.apikey,
-  authDomain: config.authdomain,
-  databaseURL: config.databaseurl,
-  storageBucket: config.storagebucket,
-};
-const database = firebase.database(firebase.initializeApp(databaseConfig));
+const database = firebase.database(
+  firebase.initializeApp({
+    credential: firebase.credential.cert(serviceAccount),
+    databaseURL: config.databaseurl,
+  })
+);
 
 app.intent('welcome_intent', conv => {
-  conv.ask(
-    "I can motivate you. Tell me your name and I'll give you a motivational tip"
-  );
-});
-
-app.intent<{ name: string }>('motivator', (conv, { name }) => {
-  const userId = conv.user.storage.id || uuid();
+  const userId = uuid();
   database.ref('users/' + userId).once('value', snapshot => {
     if (snapshot.exists()) {
       console.log('The user is here');
     } else {
       console.log('Time to add a user');
       database.ref('users/' + userId).set({
-        username: 'susie',
+        username: 'susie2',
       });
     }
   });
+  conv.ask(
+    "I can motivate you. Tell me your name and I'll give you a motivational tip"
+  );
+});
 
+app.intent<{ name: string }>('motivator', (conv, { name }) => {
   conv.ask(`this is ${name}`);
   conv.ask('Would you like a daily update?');
   conv.ask(new Suggestions('Send daily', 'no'));
