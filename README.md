@@ -9,3 +9,8 @@ This is the firebase function back end of the Action. There is also the `RobotMo
 ### Environment Variables
 
 This project requires environment variables. Run `firebase functions:config:get > .runtimeconfig.json` in the `functions` directory to run the function locally.
+
+The environment variables are:
+`robotmotivator.databaseurl`
+
+The project also requires a file called `robot-motivator-firebase-admin.json` in the root of the project which contains the service account key required to interact with a realtime database as an [admin](https://firebase.google.com/docs/database/admin/start).
