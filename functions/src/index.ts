@@ -1,6 +1,8 @@
-import * as firebase from 'firebase-admin';
-import * as functions from 'firebase-functions';
-import * as uuid from 'uuid/v4';
+import firebase from 'firebase-admin';
+import functions from 'firebase-functions';
+import uuid from 'uuid/v4';
+
+import serviceAccount from '../robot-motivator-firebase-admin.json';
 
 import { RegisterUpdate, Suggestions, dialogflow } from 'actions-on-google';
 
@@ -12,7 +14,6 @@ const app = dialogflow<{}, UserData>({
   debug: true,
 });
 
-const serviceAccount = require('../../robot-motivator-firebase-admin.json');
 const config = functions.config().robotmotivator;
 const database = firebase.database(
   firebase.initializeApp({

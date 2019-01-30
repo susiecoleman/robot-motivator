@@ -11,5 +11,8 @@
     "no-require-imports": false,
     "no-var-requires": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["*.json", "**/*.json"]
+  }
 }

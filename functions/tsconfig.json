@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "lib": ["es6"],
     "module": "commonjs",
     "noImplicitAny": true,
