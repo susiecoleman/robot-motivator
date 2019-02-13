@@ -11,7 +11,8 @@
     "outDir": "lib",
     "sourceMap": true,
     "noUnusedLocals": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
   },
   "compileOnSave": true,
   "include": ["src"],
