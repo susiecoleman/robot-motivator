@@ -1,39 +1,17 @@
 import { RegisterUpdate, Suggestions, dialogflow } from 'actions-on-google';
-import { config, region } from 'firebase-functions';
-import { credential, database, initializeApp } from 'firebase-admin';
 import {
   finishUpdateSetupUpdateUserData,
   welcomeIntentUpdateUserData,
 } from './userDataUpdates';
 
 import { UserData } from './models';
-import serviceAccount from '../robot-motivator-firebase-admin.json';
+import { region } from 'firebase-functions';
 
 const app = dialogflow<{}, UserData>({
   debug: true,
 });
 
-const appConfig = config().robotmotivator;
-const db = database(
-  initializeApp({
-    credential: credential.cert(serviceAccount),
-    databaseURL: appConfig.databaseurl,
-  })
-);
-
 app.intent('welcome_intent', conv => {
-  db;
-  // db.ref('users/' + userId).once('value', snapshot => {
-  //   if (snapshot.exists()) {
-  //     console.log('The user is here');
-  //   } else {
-  //     console.log('Time to add a user');
-  //     db.ref('users/' + userId).set({
-  //       username: 'susie2',
-  //     });
-  //   }
-  // });
-
   conv.ask(
     "I can motivate you. Tell me your name and I'll give you a motivational tip"
   );
@@ -46,8 +24,12 @@ app.intent<{ name: string }>('motivator', (conv, { name }) => {
     conv.close(motivationalStatement);
   } else {
     conv.ask(motivationalStatement);
-    conv.ask('Would you like to add motivational tips to your routine?');
-    conv.ask(new Suggestions('Add to Routine', 'no'));
+    const numberOfUses: number = conv.user.storage.numberOfUses || 0;
+    // Ask user every 5 uses
+    if (numberOfUses % 5 === 0) {
+      conv.ask('Would you like to add motivational tips to your routine?');
+      conv.ask(new Suggestions('Add to Routine', 'no'));
+    }
   }
 });
 
